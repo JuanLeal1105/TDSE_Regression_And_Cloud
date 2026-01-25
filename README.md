@@ -37,12 +37,16 @@ To run this laboratory, follow the steps below:
 3. Start running each block of code so you can see the results
 ___
 
-### Ejercicio 1
-This notebook implements linear regression from scratch to model stellar luminosity as a function of stellar mass. It covers dataset visualization, model definition, MSE loss, gradient computation, and both iterative and vectorized gradient descent.
+### Exercise 1
+This notebook implements linear regression from scratch to model stellar luminosity as a function of stellar mass. It covers dataset visualization, model definition, MSE loss, gradient computation, and both iterative and vectorized gradient descent. To see the notebook check the following link:
+
+[Open Notebook 1](01_part1_linreg_1feature.ipynb)
 
 
-### Ejercicio 2
-This notebook models nonlinear and interaction effects using polynomial features of mass and temperature. It implements vectorized gradient descent, compares models with different feature sets, evaluates the importance of the interaction term, and demonstrates prediction for a new star.
+### Exercise 2
+This notebook models nonlinear and interaction effects using polynomial features of mass and temperature. It implements vectorized gradient descent, compares models with different feature sets, evaluates the importance of the interaction term, and demonstrates prediction for a new star. To see the notebook check the following link:
+
+[Open Notebook 2](02_part2_polyreg.ipynb)
 
 
 ### AWS SageMaker Execution Evidence
