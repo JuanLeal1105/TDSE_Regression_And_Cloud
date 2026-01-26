@@ -38,17 +38,57 @@ To run this laboratory, follow the steps below:
 ___
 
 ### Exercise 1
+For this specific part of the lab, a simple linear regression model was implemented to model the relationship between stellar mass and luminosity using a single input feature. The model assumes a linear relationship of the form:
+
+$$
+\hat{L} = wM + b
+$$
+
+where \(M\) represents the stellar mass, \(w\) is the weight parameter, and \(b\) is the bias term.
+
+To quantify how well the model fits the data, the Mean Squared Error (MSE) was used as the loss function:
+
+$$
+J(w, b) = \frac{1}{2m} \sum_{i=1}^{m} (\hat{L}^{(i)} - L^{(i)})^2
+$$
+
+Analytical gradients of the cost function with respect to \(w\) and \(b\) were derived and used to optimize the model parameters. Gradient descent was implemented in both non-vectorized and vectorized forms to compare efficiency and clarity.
+
+Several learning rates were tested to study their impact on convergence behavior. Additionally, the cost surface was visualized to better understand the optimization landscape.
+
+From this analysis, it was observed that the linear model captures the general trend of the data but underfits for larger stellar masses. The cost surface shows a clear convex shape with a single global minimum, and the experiments highlight how sensitive convergence is to the choice of learning rate.
+
+#### Results
 This notebook implements linear regression from scratch to model stellar luminosity as a function of stellar mass. It covers dataset visualization, model definition, MSE loss, gradient computation, and both iterative and vectorized gradient descent. To see the notebook check the following link:
 
 [Open Notebook 1](01_part1_linreg_1feature.ipynb)
 
-
+---
 ### Exercise 2
+In the second part of the lab, the model was extended to capture more complex relationships by introducing additional features and nonlinear terms. Three different feature sets were evaluated:
+
+- **M1:** \( [M, T] \)
+- **M2:** \( [M, T, M^2] \)
+- **M3:** \( [M, T, M^2, M \cdot T] \)
+
+The full polynomial model (M3) is defined as:
+
+$$
+\hat{L} = w_1 M + w_2 T + w_3 M^2 + w_4 (M \cdot T) + b
+$$
+
+This model includes both quadratic and interaction terms, allowing it to represent nonlinear dependencies between stellar properties.
+
+All models were trained using fully vectorized gradient descent. Feature standardization was applied prior to training to ensure numerical stability and improve convergence. Training progress was evaluated using cost-versus-iteration plots.
+
+The results show that each additional nonlinear feature leads to a reduction in the final loss. The full polynomial model achieved the lowest cost, demonstrating the importance of higher-order terms and feature interactions in accurately modeling stellar luminosity.
+
+#### Results
 This notebook models nonlinear and interaction effects using polynomial features of mass and temperature. It implements vectorized gradient descent, compares models with different feature sets, evaluates the importance of the interaction term, and demonstrates prediction for a new star. To see the notebook check the following link:
 
 [Open Notebook 2](02_part2_polyreg.ipynb)
 
-
+---
 ### AWS SageMaker Execution Evidence
 The main goal of this section is to upload both of the Jupyter Notebooks we already created to the AWS SageMaker domain that was stablished in class. In order to do the so, we'll use the Code Editor environment following these steps:
 
@@ -91,4 +131,9 @@ The main goal of this section is to upload both of the Jupyter Notebooks we alre
 **Local Execution vs AWS Execution**
 
 The notebooks executed successfully in both local and AWS SageMaker environments with identical results and visual outputs. No code changes were required. The only difference observed was slightly longer execution time in SageMaker due to the cloud-based execution environment.
+
+---
+### Conclusion
+This lab explored regression modeling by starting with a simple linear relationship between stellar mass and luminosity and then extending it using polynomial and interaction features. Implementing the loss function, gradients, and gradient descent from scratch helped clarify how optimization behaves and how learning rate choices affect convergence. Visualizing the cost surface and training curves provided intuition about model stability and minima. While the linear model captured the overall trend, it showed clear limitations at higher masses. Introducing nonlinear and interaction terms improved the model’s ability to represent the data and reduced the final loss. Overall, the lab highlighted the importance of feature design, careful experimentation, and interpretation when building regression models.
+
 
