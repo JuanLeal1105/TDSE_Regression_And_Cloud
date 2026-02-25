@@ -1,0 +1,279 @@
+==============================================================
+  AUTOMATIC COPILOT EVALUATION – TA GRADING REPORT
+  Course: Digital Transformation and Enterprise Architecture
+  Assignment: Stellar Luminosity – Linear & Polynomial Regression
+  Student: Juan Carlos Leal Cruz
+==============================================================
+
+--------------------------------------------------------------
+SUMMARY
+--------------------------------------------------------------
+The repository is well-organized and addresses all required assignment
+components. Both notebooks implement linear and polynomial regression
+from first principles using only NumPy and Matplotlib, with correct
+mathematical derivations, gradient descent implementations, and
+meaningful visualizations. Cloud execution is thoroughly documented
+with step-by-step SageMaker instructions and multiple supporting
+screenshots. The main technical weaknesses are: (1) dead (unreachable)
+code inside the train_with_gd function definition in Notebook 2 (an
+X = build_X(...) reassignment placed after the return statement);
+(2) the inference demo in Notebook 2 applies weights trained on
+standardized features directly to raw (unnormalized) input, producing
+a physically implausible prediction (~12,794 solar luminosities for a
+1.3 solar-mass star, where the dataset maximum is 35); and (3) the
+student accepts this erroneous prediction as "reasonable," indicating
+a gap in critical validation. Notebook 1 is otherwise complete and
+correct. The multiple learning-rate experiments run and summarize
+results numerically but do not overlay all convergence curves on a
+single plot, which would have strengthened the comparative analysis.
+Overall, the submission demonstrates solid technical understanding
+of regression fundamentals and meets passing criteria.
+
+--------------------------------------------------------------
+GRADING BREAKDOWN (0.0 – 5.0 scale)
+--------------------------------------------------------------
+
+1. Repository Structure & Compliance          0.5 / 0.5
+   -------------------------------------------------------
+   - README.md present: YES
+   - Two notebooks present (01_part1_linreg_1feature.ipynb,
+     02_part2_polyreg.ipynb): YES
+   - Datasets defined inside notebooks (M, L arrays in NB1;
+     M, T, L arrays in NB2): YES
+   - Only allowed libraries used (numpy, matplotlib): YES
+     (%pip install numpy matplotlib in both notebooks)
+   No deductions.
+
+2. Notebook 1 – Linear Regression             1.8 / 2.0
+   -------------------------------------------------------
+   Items assessed:
+   [+] Dataset visualization (scatter plot, mass vs luminosity): PRESENT
+   [+] Discussion of linearity and plausibility: PRESENT
+   [+] Hypothesis function (predict_luminosity) and MSE
+       (compute_mse): PRESENT and CORRECT
+   [+] Cost surface: 3D grid correctly built, surface plot with
+       colorbar displayed, interpretation provided: PRESENT
+   [+] Gradient derivation (gradients_explicit): CORRECT
+       (∂J/∂w and ∂J/∂b computed analytically from MSE)
+   [+] Non-vectorized gradient descent (run_gradient_descent):
+       PRESENT and CORRECT (returns w, b, loss_history)
+   [+] Vectorized gradient descent (run_gradient_descent_vec
+       using gradients_vectorized): PRESENT and CORRECT
+   [+] Convergence plot (losses_vec over iterations): PRESENT
+   [+] Convergence discussion (stable convergence, no oscillations): PRESENT
+   [+] Multiple learning-rate experiments (α = 0.001, 0.01, 0.1): PRESENT
+   [+] Final fit plot (scatter + regression line): PRESENT
+   [+] Error discussion (systematic underestimation at high mass): PRESENT
+   [+] Meaning of w (rate of luminosity change per solar mass): PRESENT
+   [+] Limits of linearity (power-law behavior, underfitting): PRESENT
+
+   Deductions:
+   [-0.2] The three learning-rate experiments (Section 8) run
+          independently and print a summary table, but convergence
+          curves for all three rates are not overlaid on a single
+          comparative plot. A multi-curve convergence figure would
+          have made the impact of learning rate immediately visible.
+          The convergence plot in Section 7 shows only the single
+          run with α=0.01.
+
+3. Notebook 2 – Polynomial Regression         1.65 / 2.0
+   -------------------------------------------------------
+   Items assessed:
+   [+] Visualization with temperature encoding (scatter with plasma
+       colormap for T): PRESENT
+   [+] Feature engineering [M, T, M², M·T] via build_X function
+       with M1/M2/M3 variants: PRESENT and CORRECT
+   [+] Vectorized loss (compute_cost) and gradients
+       (compute_gradient): PRESENT and CORRECT
+   [+] Training (train_with_gd) and convergence plot: PRESENT
+   [+] Feature selection experiment (M1, M2, M3 comparison with
+       predicted-vs-actual scatter plots and loss values): PRESENT
+   [+] Interaction cost analysis (w_MT sweep around trained value,
+       convex cost curve with minimum near trained w_MT): PRESENT
+   [+] Inference demo (new star M=1.3, T=6600): PRESENT
+
+   Deductions:
+   [-0.15] Unreachable dead code in cell 13: the line
+           "X = build_X(M, T, model_type='M3')" is placed inside
+           train_with_gd after the return statement. While execution
+           proceeds correctly (the X from cell 8 is used at module
+           level), the orphaned line is misleading and indicates a
+           copy-paste or editing error.
+   [-0.20] Critical normalization bug in the inference demo
+           (cell 24): the new star's raw features
+           [M_new, T_new, M_new², M_new·T_new] are fed directly
+           to w_ref, which was trained on standardized (z-score)
+           features produced by normalize_X. The resulting
+           prediction of ~12,794 solar luminosities is three orders
+           of magnitude above the dataset maximum (35) and is
+           physically implausible for a 1.3 solar-mass star.
+           The student's comment that this value is "reasonable"
+           and "slightly higher than the maximum observed luminosity"
+           is factually incorrect and reflects a lack of critical
+           validation of model output.
+
+4. Cloud Execution Evidence (SageMaker)       0.5 / 0.5
+   -------------------------------------------------------
+   - Detailed step-by-step SageMaker Code Editor setup: PRESENT
+   - Screenshots of SageMaker Studio domain and space creation
+     (First.png, Second.png, Third.png, Fourth.png): PRESENT
+   - Screenshots showing notebooks uploaded and kernels selected
+     (Fifth.png, Sixth.png): PRESENT
+   - Screenshot of Run All execution (Seventh.png): PRESENT
+   - At least two plot screenshots from executed notebooks
+     (Ninth.png, Eight.png): PRESENT
+   - Screenshot confirming space stopped and lab ended
+     (Eleven.png, Twelve.png): PRESENT
+   - Brief local vs cloud comparison (identical results, slight
+     overhead in SageMaker): PRESENT
+   No deductions.
+
+--------------------------------------------------------------
+FINAL GRADE
+--------------------------------------------------------------
+
+  Repository structure & compliance:  0.50 / 0.50
+  Notebook 1 – Linear regression:     1.80 / 2.00
+  Notebook 2 – Polynomial regression: 1.65 / 2.00
+  Cloud execution evidence:           0.50 / 0.50
+  ------------------------------------------------
+  Total:                              4.45 / 5.00
+
+  Final grade: 4.4 / 5.0
+
+  Result: PASS (≥ 3.0 / 5.0)
+
+--------------------------------------------------------------
+STRENGTHS
+--------------------------------------------------------------
+- All mandatory items for both notebooks are present: cost surface
+  (3D grid + plot + explanation), convergence plots with discussion,
+  and at least three learning-rate experiments in NB1; M1/M2/M3
+  feature comparison, w_MT interaction sweep, and inference demo in NB2.
+- Both non-vectorized and vectorized gradient descent are correctly
+  implemented in Notebook 1, and the two implementations agree on
+  final parameters.
+- Feature engineering is cleanly abstracted through the build_X
+  function with three selectable model tiers (M1, M2, M3).
+- Vectorized loss and gradient computation in Notebook 2 follows
+  correct matrix algebra (X.T @ error / m).
+- Notebook 1's cost surface is well-constructed with a 60×60 grid,
+  rendered as a 3D surface with a colorbar and clear axis labels.
+- The convergence analysis in Notebook 1 correctly identifies the
+  shape of the curve and absence of oscillations for α=0.01.
+- SageMaker evidence is thorough: 12 ordered screenshots walk
+  through the entire cloud setup and execution lifecycle.
+- The README provides a clear, concise description of both
+  exercises including the mathematical models and key findings.
+
+--------------------------------------------------------------
+ISSUES & MISSING ELEMENTS
+--------------------------------------------------------------
+- [NB1] Multi-curve learning-rate comparison plot is missing.
+  Three runs are performed and summarized in a table, but a
+  single figure overlaying convergence curves for α=0.001, 0.01,
+  and 0.1 would provide stronger visual evidence of rate sensitivity.
+- [NB2] Inference demo contains a normalization bug: w_ref was
+  optimized on z-score normalized features, but prediction is made
+  with raw input. Correct inference requires applying the stored
+  mean (mu) and standard deviation (sigma) to X_new before
+  multiplying by w_ref.
+- [NB2] The student's commentary on the inference result (~12,794)
+  incorrectly describes it as "reasonable." This value is physically
+  implausible and should have triggered a sanity check against
+  the training data range (0.15–35.0 solar luminosities).
+- [NB2] Dead code inside train_with_gd (X = build_X(...) after
+  return statement) should be removed to avoid confusion.
+- [NB1] The experiment in Section 8 could benefit from a plot
+  showing the fitted line for each learning rate, not just final
+  parameters, to assess qualitative differences in fit quality.
+
+--------------------------------------------------------------
+TA FEEDBACK TO STUDENT
+--------------------------------------------------------------
+Overall, this is a well-executed submission that demonstrates a solid
+grasp of regression fundamentals. Your implementations of MSE, gradient
+descent (both non-vectorized and vectorized), and the cost surface are
+correct and clearly presented. The SageMaker documentation is
+exemplary in its level of detail.
+
+The most important issue to address is the inference bug in Notebook 2:
+whenever you train a model on normalized features, you must also
+normalize new inputs before prediction. Specifically, for a new data
+point x_new, compute x_norm = (x_new - mu) / sigma using the mu and
+sigma saved from the training set, then predict with L_hat = x_norm @ w + b.
+Applying the trained weights to raw, un-normalized features will always
+produce a nonsensical output. Always validate predictions against your
+training data range as a sanity check.
+
+For the learning-rate experiment in Notebook 1, consider adding a
+multi-curve convergence plot (one curve per α on the same axes). This
+is a standard, informative visualization that immediately conveys how
+learning rate affects convergence speed and stability.
+
+Finally, remove the unreachable X = build_X(...) line inside the
+train_with_gd function body. Such dead code can confuse readers and
+masks the fact that the X variable is inherited from outer scope.
+
+These are all fixable issues; the conceptual foundation of your work
+is sound.
+
+--------------------------------------------------------------
+AI-GENERATION ASSESSMENT (NON-GRADING, INFORMATIONAL ONLY)
+--------------------------------------------------------------
+
+A. Qualitative Assessment
+   Indicators of AI generation:
+   - Markdown explanations follow a uniform, professional tone
+     throughout both notebooks and the README with little variation
+     in voice or depth.
+   - Section headers, code structure, and narrative commentary are
+     consistently organized in a formulaic pattern (setup → derivation
+     → implementation → visualization → interpretation).
+   - Conceptual explanations (e.g., meaning of w, cost surface
+     interpretation, interaction term importance) use generic,
+     textbook-style phrasing with no personalized reasoning or
+     idiosyncratic observations.
+   - The README conclusion paragraph summarizes all major findings
+     in smooth, coherent prose that is atypically polished for a
+     student lab submission.
+   - Variable naming conventions (e.g., grad_w/grad_b, iter_log/
+     cost_log, M_arr/L_arr) are clean and consistent, typical of
+     AI-assisted code generation.
+
+   Indicators of human work:
+   - Several minor typos are present in the markdown: "stablish"
+     (establish), "Systemaci" (Systematic), "thn" (than), "canno"
+     (cannot, truncated), "it's" in technical context. These
+     small errors are typical of human writing.
+   - The dead-code bug in Notebook 2 (X = build_X inside the
+     function after return) and the normalization oversight in
+     the inference cell suggest genuine development-time mistakes
+     rather than a perfectly generated artifact.
+   - The SageMaker section reads as a first-person walkthrough
+     that reflects a real execution experience (e.g., noting that
+     "it will take a while for the Code Editor to open").
+
+B. Quantitative Estimate
+   Code:                ~70% AI-assisted
+   Explanations/Markdown: ~75% AI-assisted
+   README:              ~65% AI-assisted
+
+C. Commentary
+   The notebooks exhibit a combination of polished, AI-typical
+   structure and minor human-introduced imperfections. The conceptual
+   explanations are consistently well-phrased and comprehensive in
+   a way that is unlikely to arise from a student working purely
+   independently, while the occasional typo and the presence of
+   real implementation bugs (normalization error, dead code) suggest
+   the student actively interacted with and edited the generated
+   content rather than submitting it verbatim. The README in
+   particular shows a blend: the technical sections appear
+   AI-assisted while the SageMaker walkthrough reads as
+   personally authored.
+
+   This assessment is observational and does not imply misconduct.
+
+==============================================================
+  End of Report
+==============================================================
